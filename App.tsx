@@ -9,7 +9,7 @@
  */
 
 import React from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 
 import * as Tabs from 'react-native-collapsible-tab-view';
 
@@ -35,6 +35,9 @@ const App = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Tabs.Container
+        HeaderComponent={(props: any) => (
+          <View style={{backgroundColor: '#eee', height: 200}} />
+        )}
         TabBarComponent={(props: any) => (
           <CustomTabBar
             {...props}
