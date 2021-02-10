@@ -9,17 +9,37 @@
  */
 
 import React from 'react';
-import {SafeAreaView} from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
 
 import * as Tabs from 'react-native-collapsible-tab-view';
 
 declare const global: {HermesInternal: null | {}};
 
+const CustomTabBar = ({
+  activeColor = '#1d1d1c',
+  inactiveColor = '#E3E3E3',
+  tabBarItemProps = {},
+  ...props
+}) => (
+  <Tabs.MaterialTabBar
+    activeColor={activeColor}
+    inactiveColor={inactiveColor}
+    indicatorStyle={styles.indicatorStyle}
+    {...props}
+  />
+);
+
 const App = () => {
-  console.log('test');
   return (
     <SafeAreaView>
-      <Tabs.Container>
+      <Tabs.Container
+        TabBarComponent={(props: any) => (
+          <CustomTabBar
+            {...props}
+            // Adding `scrollEnabled` removes indicator
+            scrollEnabled
+          />
+        )}>
         <Tabs.Tab name="A">
           <Tabs.FlatList
             data={[0, 1, 2, 3, 4]}
@@ -34,5 +54,12 @@ const App = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  indicatorStyle: {
+    backgroundColor: '#000',
+    height: 2,
+  },
+});
 
 export default App;
