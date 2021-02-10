@@ -13,6 +13,8 @@ import {SafeAreaView, StyleSheet} from 'react-native';
 
 import * as Tabs from 'react-native-collapsible-tab-view';
 
+import Albums from './Albums';
+
 declare const global: {HermesInternal: null | {}};
 
 const CustomTabBar = ({
@@ -31,7 +33,7 @@ const CustomTabBar = ({
 
 const App = () => {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <Tabs.Container
         TabBarComponent={(props: any) => (
           <CustomTabBar
@@ -41,11 +43,7 @@ const App = () => {
           />
         )}>
         <Tabs.Tab name="A">
-          <Tabs.FlatList
-            data={[0, 1, 2, 3, 4]}
-            keyExtractor={(v) => v + ''}
-            renderItem={null}
-          />
+          <Albums />
         </Tabs.Tab>
         <Tabs.Tab name="B">
           <Tabs.ScrollView>{null}</Tabs.ScrollView>
@@ -56,6 +54,9 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   indicatorStyle: {
     backgroundColor: '#000',
     height: 2,
