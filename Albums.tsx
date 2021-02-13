@@ -39,12 +39,11 @@ const ListEmptyComponent = () => {
 export const Albums: React.FC = ({data}) => {
   const [delayedData, setDelayedData] = React.useState([]);
 
-  // Trigger a re-render on this page?
+  // Trigger multiple re-renders on this page?
   const [, updateState] = React.useState(1);
   React.useEffect(() => {
     const timer = setTimeout(() => {
       updateState(2);
-
       // Seems fine
       // setDelayedData(data);
     }, 100); // If this is higher, it seems slightly better?

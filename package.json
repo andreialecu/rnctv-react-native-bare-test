@@ -15,7 +15,7 @@
     "@react-navigation/stack": "^5.14.2",
     "react": "16.13.1",
     "react-native": "0.63.4",
-    "react-native-collapsible-tab-view": "^4.0.0-rc.3",
+    "react-native-collapsible-tab-view": "^4.0.0-rc.4",
     "react-native-gesture-handler": "^1.10.0",
     "react-native-reanimated": "2.0.0-rc.0",
     "react-native-safe-area-context": "^3.1.9",
