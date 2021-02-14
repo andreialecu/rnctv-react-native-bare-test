@@ -21,51 +21,36 @@ declare const global: {HermesInternal: null | {}};
 
 enableScreens();
 
-const COVERS = [
-  'https://source.unsplash.com/random/1600x900',
-  'https://source.unsplash.com/random/1600x901',
-  'https://source.unsplash.com/random/1600x902',
-  'https://source.unsplash.com/random/1600x903',
-  'https://source.unsplash.com/random/1600x904',
-  'https://source.unsplash.com/random/1600x905',
-  'https://source.unsplash.com/random/1600x906',
-  'https://source.unsplash.com/random/1600x907',
-  'https://source.unsplash.com/random/1600x908',
-  'https://source.unsplash.com/random/1600x909',
-  'https://source.unsplash.com/random/1600x910',
-].sort(() => 0.5 - Math.random());
+const GetNewCovers = () =>
+  [
+    'https://source.unsplash.com/random/1600x900',
+    'https://source.unsplash.com/random/1600x901',
+    'https://source.unsplash.com/random/1600x902',
+    'https://source.unsplash.com/random/1600x903',
+    'https://source.unsplash.com/random/1600x904',
+    'https://source.unsplash.com/random/1600x905',
+    'https://source.unsplash.com/random/1600x906',
+    'https://source.unsplash.com/random/1600x907',
+    'https://source.unsplash.com/random/1600x908',
+    'https://source.unsplash.com/random/1600x909',
+    'https://source.unsplash.com/random/1600x910',
+  ].sort(() => 0.5 - Math.random());
 
-const COVERS2 = [
-  'https://source.unsplash.com/random/1600x900',
-  'https://source.unsplash.com/random/1600x901',
-  'https://source.unsplash.com/random/1600x902',
-  'https://source.unsplash.com/random/1600x903',
-  'https://source.unsplash.com/random/1600x904',
-  'https://source.unsplash.com/random/1600x905',
-  'https://source.unsplash.com/random/1600x906',
-  'https://source.unsplash.com/random/1600x907',
-  'https://source.unsplash.com/random/1600x908',
-  'https://source.unsplash.com/random/1600x909',
-  'https://source.unsplash.com/random/1600x910',
-  'https://source.unsplash.com/random/1600x911',
-  'https://source.unsplash.com/random/1600x912',
-  'https://source.unsplash.com/random/1600x913',
-  'https://source.unsplash.com/random/1600x914',
-].sort(() => 0.5 - Math.random());
+const COVERS = GetNewCovers();
 
 const Header = () => <View style={styles.header} />;
 
 const TabScreen = () => {
-  const [covers, setCovers] = React.useState<typeof COVERS2>([]);
+  const [covers, setCovers] = React.useState(COVERS);
   return (
     <SafeAreaView style={styles.container}>
       <Tabs.Container
         HeaderComponent={Header}
         onTabChange={() => {
-          setCovers(COVERS2);
+          setCovers(GetNewCovers());
         }}>
         <Tabs.Tab name="A">
-          <Albums data={COVERS} />
+          <Albums data={covers} />
         </Tabs.Tab>
         <Tabs.Tab name="B">
           <Albums data={covers} />
