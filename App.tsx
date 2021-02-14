@@ -56,14 +56,19 @@ const COVERS2 = [
 const Header = () => <View style={styles.header} />;
 
 const TabScreen = () => {
+  const [covers, setCovers] = React.useState<typeof COVERS2>([]);
   return (
     <SafeAreaView style={styles.container}>
-      <Tabs.Container HeaderComponent={Header}>
+      <Tabs.Container
+        HeaderComponent={Header}
+        onTabChange={() => {
+          setCovers(COVERS2);
+        }}>
         <Tabs.Tab name="A">
           <Albums data={COVERS} />
         </Tabs.Tab>
         <Tabs.Tab name="B">
-          <Albums data={COVERS2} />
+          <Albums data={covers} />
         </Tabs.Tab>
       </Tabs.Container>
     </SafeAreaView>
