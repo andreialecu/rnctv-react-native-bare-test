@@ -1,10 +1,11 @@
-import * as React from 'react';
+import React, {useContext} from 'react';
 import {Image, Dimensions, StyleSheet, Text} from 'react-native';
 import * as Tabs from 'react-native-collapsible-tab-view';
 import Animated, {
   useAnimatedStyle,
   useDerivedValue,
 } from 'react-native-reanimated';
+import {TabScreenContext} from './context';
 
 const width = Dimensions.get('window').width;
 
@@ -36,8 +37,9 @@ const ListEmptyComponent = () => {
   );
 };
 
-export const Albums: React.FC = ({data}) => {
-  const [delayedData, setDelayedData] = React.useState([]);
+export const Albums: React.FC = () => {
+  const {covers} = useContext(TabScreenContext);
+
   const [isRefreshing, setIsRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
@@ -47,26 +49,10 @@ export const Albums: React.FC = ({data}) => {
     }, 2000);
   }, []);
 
-  // Trigger a re-render on this page?
-  const [, updateState] = React.useState(1);
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      updateState(2);
-
-      // Seems fine
-      // setDelayedData(data);
-    }, 100); // If this is higher, it seems slightly better?
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
-
   return (
     <Tabs.FlatList
       numColumns={2}
-      // data={delayedData}
-      data={data}
+      data={covers}
       ListEmptyComponent={ListEmptyComponent}
       renderItem={({item}) => (
         <Image source={{uri: item}} style={styles.cover} />

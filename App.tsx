@@ -16,6 +16,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {enableScreens} from 'react-native-screens';
 
 import Albums from './Albums';
+import {TabScreenContext} from './context';
 
 declare const global: {HermesInternal: null | {}};
 
@@ -42,20 +43,39 @@ const Header = () => <View style={styles.header} />;
 
 const TabScreen = () => {
   const [covers, setCovers] = React.useState(COVERS);
+
+  const _renderTabBar = (props: any) => (
+    <Tabs.MaterialTabBar
+      {...props}
+      indicatorStyle={{
+        backgroundColor: 'black',
+        height: 2,
+      }}
+    />
+  );
+
   return (
     <SafeAreaView style={styles.container}>
-      <Tabs.Container
-        HeaderComponent={Header}
-        onTabChange={() => {
-          setCovers(GetNewCovers());
+      <TabScreenContext.Provider
+        value={{
+          covers,
         }}>
-        <Tabs.Tab name="A">
-          <Albums data={covers} />
-        </Tabs.Tab>
-        <Tabs.Tab name="B">
-          <Albums data={covers} />
-        </Tabs.Tab>
-      </Tabs.Container>
+        <Tabs.Container
+          HeaderComponent={Header}
+          onTabChange={() => {
+            setTimeout(() => {
+              setCovers(GetNewCovers());
+            }, 200);
+          }}
+          TabBarComponent={_renderTabBar}>
+          <Tabs.Tab name="A">
+            <Albums />
+          </Tabs.Tab>
+          <Tabs.Tab name="B">
+            <Albums />
+          </Tabs.Tab>
+        </Tabs.Container>
+      </TabScreenContext.Provider>
     </SafeAreaView>
   );
 };
