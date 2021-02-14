@@ -38,12 +38,21 @@ const ListEmptyComponent = () => {
 
 export const Albums: React.FC = ({data}) => {
   const [delayedData, setDelayedData] = React.useState([]);
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
 
-  // Trigger multiple re-renders on this page?
+  const onRefresh = React.useCallback(() => {
+    setIsRefreshing(true);
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 2000);
+  }, []);
+
+  // Trigger a re-render on this page?
   const [, updateState] = React.useState(1);
   React.useEffect(() => {
     const timer = setTimeout(() => {
       updateState(2);
+
       // Seems fine
       // setDelayedData(data);
     }, 100); // If this is higher, it seems slightly better?
@@ -63,6 +72,8 @@ export const Albums: React.FC = ({data}) => {
         <Image source={{uri: item}} style={styles.cover} />
       )}
       keyExtractor={(_, i) => String(i)}
+      refreshing={isRefreshing}
+      onRefresh={onRefresh}
     />
   );
 };
