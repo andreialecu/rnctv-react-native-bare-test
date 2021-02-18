@@ -42,7 +42,7 @@ const COVERS = GetNewCovers();
 const Header = () => <View style={styles.header} />;
 
 const TabScreen = () => {
-  const [covers, setCovers] = React.useState(COVERS);
+  const [covers, _] = React.useState(COVERS);
 
   const _renderTabBar = (props: any) => (
     <Tabs.MaterialTabBar
@@ -62,11 +62,6 @@ const TabScreen = () => {
         }}>
         <Tabs.Container
           HeaderComponent={Header}
-          onTabChange={() => {
-            setTimeout(() => {
-              setCovers(GetNewCovers());
-            }, 200);
-          }}
           TabBarComponent={_renderTabBar}>
           <Tabs.Tab name="A">
             <Albums />

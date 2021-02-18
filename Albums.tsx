@@ -1,10 +1,20 @@
 import React, {useContext} from 'react';
-import {Image, Dimensions, StyleSheet, Text} from 'react-native';
+import {
+  Image,
+  Dimensions,
+  StyleSheet,
+  Text,
+  Alert,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  Pressable,
+} from 'react-native';
 import * as Tabs from 'react-native-collapsible-tab-view';
 import Animated, {
   useAnimatedStyle,
   useDerivedValue,
 } from 'react-native-reanimated';
+import {TouchableOpacity as TouchableOpacityRNGH} from 'react-native-gesture-handler';
 import {TabScreenContext} from './context';
 
 const width = Dimensions.get('window').width;
@@ -54,9 +64,30 @@ export const Albums: React.FC = () => {
       numColumns={2}
       data={covers}
       ListEmptyComponent={ListEmptyComponent}
-      renderItem={({item}) => (
-        <Image source={{uri: item}} style={styles.cover} />
-      )}
+      renderItem={({item, index}) => {
+        const PressableComponent =
+          index % 4 === 0
+            ? TouchableOpacityRNGH
+            : index % 3 === 0
+            ? TouchableWithoutFeedback
+            : index % 2 === 0
+            ? TouchableOpacity
+            : Pressable;
+        const PressableComponentString =
+          index % 4 === 0
+            ? 'TouchableOpacityRNGH'
+            : index % 3 === 0
+            ? 'TouchableWithoutFeedback'
+            : index % 2 === 0
+            ? 'TouchableOpacity'
+            : 'Pressable';
+        return (
+          <PressableComponent
+            onPress={() => Alert.alert(PressableComponentString)}>
+            <Image source={{uri: item}} style={styles.cover} />
+          </PressableComponent>
+        );
+      }}
       keyExtractor={(_, i) => String(i)}
       refreshing={isRefreshing}
       onRefresh={onRefresh}
