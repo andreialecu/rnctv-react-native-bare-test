@@ -43,7 +43,7 @@ const Header = () => <View style={styles.header} />;
 
 const TabScreen = () => {
   const [covers, _] = React.useState(COVERS);
-  const pageRef = React.useRef(null);
+  const pageRef = React.useRef<Tabs.CollapsibleRef>(null);
 
   const _renderTabBar = (props: any) => (
     <Tabs.MaterialTabBar
@@ -54,14 +54,6 @@ const TabScreen = () => {
       }}
     />
   );
-
-  // Issue #138
-  React.useEffect(() => {
-    setTimeout(() => {
-      // Only seems to happen with `0`
-      pageRef.current?.setIndex(0);
-    }, 500);
-  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
