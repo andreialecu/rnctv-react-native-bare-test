@@ -23,19 +23,9 @@ declare const global: {HermesInternal: null | {}};
 enableScreens();
 
 const GetNewCovers = () =>
-  [
-    'https://source.unsplash.com/random/1600x900',
-    'https://source.unsplash.com/random/1600x901',
-    'https://source.unsplash.com/random/1600x902',
-    'https://source.unsplash.com/random/1600x903',
-    'https://source.unsplash.com/random/1600x904',
-    'https://source.unsplash.com/random/1600x905',
-    'https://source.unsplash.com/random/1600x906',
-    'https://source.unsplash.com/random/1600x907',
-    'https://source.unsplash.com/random/1600x908',
-    'https://source.unsplash.com/random/1600x909',
-    'https://source.unsplash.com/random/1600x910',
-  ].sort(() => 0.5 - Math.random());
+  new Array(1000)
+    .fill('https://source.unsplash.com/random/1600x900')
+    .sort(() => 0.5 - Math.random());
 
 const COVERS = GetNewCovers();
 
