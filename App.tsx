@@ -16,6 +16,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {enableScreens} from 'react-native-screens';
 
 import Albums from './Albums';
+import Page from './Page';
 import {TabScreenContext} from './context';
 
 declare const global: {HermesInternal: null | {}};
@@ -39,7 +40,20 @@ const GetNewCovers = () =>
 
 const COVERS = GetNewCovers();
 
-const Header = () => <View style={styles.header} />;
+const Header = () => {
+  const {user} = React.useContext(TabScreenContext);
+  return (
+    <View
+      style={[
+        styles.header,
+        {
+          height: user?.role === 'artist' ? 200 : 100,
+          backgroundColor: user?.role === 'artist' ? 'pink' : 'green',
+        },
+      ]}
+    />
+  );
+};
 
 const TabScreen = () => {
   const [covers, _] = React.useState(COVERS);
@@ -55,13 +69,16 @@ const TabScreen = () => {
     />
   );
 
-  const [tabs, setTabs] = React.useState([]);
+  const [user, setUser] = React.useState<any>({});
 
+  // EXAMPLE 1: First tab is shown as blank if array is empty
+
+  const [tabs, setTabs] = React.useState<any>([]);
   useEffect(() => {
     setTimeout(() => {
       setTabs([
         {
-          component: <Albums />,
+          component: <Page />,
           name: 'A',
         },
         {
@@ -69,32 +86,78 @@ const TabScreen = () => {
           name: 'B',
         },
       ]);
-    }, 1);
+    }, 200);
   }, []);
+
+  // EXAMPLE 2: WIP - simulating a role change of a user, still not seeing the same error
+
+  // const [tabs, setTabs] = React.useState([
+  //   ...(user?.role === 'artist'
+  //     ? [
+  //         {
+  //           component: <Page />,
+  //           name: 'C',
+  //         },
+  //       ]
+  //     : []),
+  //   {
+  //     component: <Albums />,
+  //     name: 'A',
+  //   },
+  // ]);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setUser({role: 'artist'});
+  //   }, 500);
+  // }, []);
+
+  // useEffect(() => {
+  //   setTabs([
+  //     {
+  //       component: <Albums />,
+  //       name: 'A',
+  //     },
+  //     ...(user?.role === 'artist'
+  //       ? [
+  //           {
+  //             component: <Page />,
+  //             name: 'C',
+  //           },
+  //         ]
+  //       : []),
+  //   ]);
+  // }, [user?.role]);
+
+  const _renderHeader = () => <Header />;
+
+  const MemoizedTabs = React.useMemo(
+    () => (
+      <Tabs.Container
+        // HeaderComponent={Header}
+        HeaderComponent={_renderHeader}
+        TabBarComponent={_renderTabBar}
+        ref={pageRef}
+        lazy
+        snapThreshold={0.5}>
+        {tabs.map((tab) => (
+          <Tabs.Tab key={tab.name} name={tab.name}>
+            {tab.component}
+          </Tabs.Tab>
+        ))}
+      </Tabs.Container>
+    ),
+    [tabs],
+  );
 
   return (
     <SafeAreaView style={styles.container}>
       <TabScreenContext.Provider
         value={{
           covers,
+          user,
         }}>
-        <Tabs.Container
-          HeaderComponent={Header}
-          TabBarComponent={_renderTabBar}
-          ref={pageRef}
-          lazy>
-          {/* <Tabs.Tab name="A">
-            <Albums />
-          </Tabs.Tab>
-          <Tabs.Tab name="B">
-            <Albums />
-          </Tabs.Tab> */}
-          {tabs.map((tab) => (
-            <Tabs.Tab key={tab.name} name={tab.name}>
-              {tab.component}
-            </Tabs.Tab>
-          ))}
-        </Tabs.Container>
+        {MemoizedTabs}
       </TabScreenContext.Provider>
     </SafeAreaView>
   );
@@ -134,7 +197,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: 200,
+    // height: 200,
     backgroundColor: 'blue',
     flex: 1,
   },
