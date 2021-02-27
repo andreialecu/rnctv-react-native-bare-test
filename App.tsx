@@ -8,7 +8,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import {SafeAreaView, StyleSheet, View, Pressable, Text} from 'react-native';
 import * as Tabs from 'react-native-collapsible-tab-view';
 import {NavigationContainer} from '@react-navigation/native';
@@ -55,6 +55,23 @@ const TabScreen = () => {
     />
   );
 
+  const [tabs, setTabs] = React.useState([]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setTabs([
+        {
+          component: <Albums />,
+          name: 'A',
+        },
+        {
+          component: <Albums />,
+          name: 'B',
+        },
+      ]);
+    }, 1);
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <TabScreenContext.Provider
@@ -64,13 +81,19 @@ const TabScreen = () => {
         <Tabs.Container
           HeaderComponent={Header}
           TabBarComponent={_renderTabBar}
-          ref={pageRef}>
-          <Tabs.Tab name="A">
+          ref={pageRef}
+          lazy>
+          {/* <Tabs.Tab name="A">
             <Albums />
           </Tabs.Tab>
           <Tabs.Tab name="B">
             <Albums />
-          </Tabs.Tab>
+          </Tabs.Tab> */}
+          {tabs.map((tab) => (
+            <Tabs.Tab key={tab.name} name={tab.name}>
+              {tab.component}
+            </Tabs.Tab>
+          ))}
         </Tabs.Container>
       </TabScreenContext.Provider>
     </SafeAreaView>
