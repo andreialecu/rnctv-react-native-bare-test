@@ -12,8 +12,15 @@ import React, {useEffect} from 'react';
 import {SafeAreaView, StyleSheet, View, Pressable, Text} from 'react-native';
 import * as Tabs from 'react-native-collapsible-tab-view';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+// import {createStackNavigator} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {enableScreens} from 'react-native-screens';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  withDelay,
+} from 'react-native-reanimated';
 
 import Albums from './Albums';
 import Page from './Page';
@@ -41,21 +48,19 @@ const GetNewCovers = () =>
 const COVERS = GetNewCovers();
 
 const Header = () => {
-  const {user} = React.useContext(TabScreenContext);
-  return (
-    <View
-      style={[
-        styles.header,
-        {
-          height: user?.role === 'artist' ? 200 : 100,
-          backgroundColor: user?.role === 'artist' ? 'pink' : 'green',
-        },
-      ]}
-    />
-  );
+  const animated = useSharedValue(0);
+  useEffect(() => {
+    animated.value = withDelay(1, withTiming(1));
+  }, []);
+  const headerStylez = useAnimatedStyle(() => {
+    return {
+      height: animated.value === 1 ? 100 : 0,
+    };
+  });
+  return <Animated.View style={[styles.header, headerStylez]} />;
 };
 
-const TabScreen = () => {
+const TabScreen = React.memo(() => {
   const [covers, _] = React.useState(COVERS);
   const pageRef = React.useRef<Tabs.CollapsibleRef>(null);
 
@@ -69,99 +74,58 @@ const TabScreen = () => {
     />
   );
 
-  const [user, setUser] = React.useState<any>({});
+  const [tabs, setTabs] = React.useState<any>([
+    {
+      component: <Albums />,
+      name: 'B',
+    },
+  ]);
 
-  // EXAMPLE 1: First tab is shown as blank if array is empty
-
-  const [tabs, setTabs] = React.useState<any>([]);
+  const firstRender = React.useRef(true);
   useEffect(() => {
-    setTimeout(() => {
-      setTabs([
-        {
-          component: <Page />,
-          name: 'A',
-        },
-        {
-          component: <Albums />,
-          name: 'B',
-        },
-      ]);
-    }, 200);
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+
+    setTabs([
+      {
+        component: <Albums />,
+        name: 'B',
+      },
+      {
+        component: <Page />,
+        name: 'A',
+      },
+    ]);
   }, []);
-
-  // EXAMPLE 2: WIP - simulating a role change of a user, still not seeing the same error
-
-  // const [tabs, setTabs] = React.useState([
-  //   ...(user?.role === 'artist'
-  //     ? [
-  //         {
-  //           component: <Page />,
-  //           name: 'C',
-  //         },
-  //       ]
-  //     : []),
-  //   {
-  //     component: <Albums />,
-  //     name: 'A',
-  //   },
-  // ]);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setUser({role: 'artist'});
-  //   }, 500);
-  // }, []);
-
-  // useEffect(() => {
-  //   setTabs([
-  //     {
-  //       component: <Albums />,
-  //       name: 'A',
-  //     },
-  //     ...(user?.role === 'artist'
-  //       ? [
-  //           {
-  //             component: <Page />,
-  //             name: 'C',
-  //           },
-  //         ]
-  //       : []),
-  //   ]);
-  // }, [user?.role]);
-
-  const _renderHeader = () => <Header />;
-
-  const MemoizedTabs = React.useMemo(
-    () => (
-      <Tabs.Container
-        // HeaderComponent={Header}
-        HeaderComponent={_renderHeader}
-        TabBarComponent={_renderTabBar}
-        ref={pageRef}
-        lazy
-        snapThreshold={0.5}>
-        {tabs.map((tab) => (
-          <Tabs.Tab key={tab.name} name={tab.name}>
-            {tab.component}
-          </Tabs.Tab>
-        ))}
-      </Tabs.Container>
-    ),
-    [tabs],
-  );
 
   return (
     <SafeAreaView style={styles.container}>
       <TabScreenContext.Provider
         value={{
           covers,
-          user,
         }}>
-        {MemoizedTabs}
+        <Tabs.Container
+          HeaderComponent={Header}
+          // HeaderComponent={() => <View style={{height: 100}} />}
+          TabBarComponent={_renderTabBar}
+          ref={pageRef}
+          pagerProps={{
+            showsVerticalScrollIndicator: false,
+          }}
+          lazy
+          snapThreshold={0.5}>
+          {tabs.map((tab) => (
+            <Tabs.Tab key={tab.name} name={tab.name}>
+              {tab.component}
+            </Tabs.Tab>
+          ))}
+        </Tabs.Container>
       </TabScreenContext.Provider>
     </SafeAreaView>
   );
-};
+});
 
 const HomeScreen = ({navigation}) => {
   return (
@@ -173,22 +137,23 @@ const HomeScreen = ({navigation}) => {
   );
 };
 
-const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+// const Stack = createStackNavigator();
 
 const App = () => (
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="Home">
-      <Stack.Screen
+    <Tab.Navigator initialRouteName="TabScreen">
+      <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{title: 'Home'}}
       />
-      <Stack.Screen
+      <Tab.Screen
         name="TabScreen"
         component={TabScreen}
         options={{title: 'Tabs'}}
       />
-    </Stack.Navigator>
+    </Tab.Navigator>
   </NavigationContainer>
 );
 
@@ -197,9 +162,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    // height: 200,
-    backgroundColor: 'blue',
-    flex: 1,
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    width: '100%',
   },
 });
 
