@@ -23,7 +23,7 @@ declare const global: {HermesInternal: null | {}};
 enableScreens();
 
 const GetNewCovers = () =>
-  new Array(1000)
+  new Array(2)
     .fill('https://source.unsplash.com/random/1600x900')
     .sort(() => 0.5 - Math.random());
 
@@ -54,7 +54,7 @@ const TabScreen = () => {
         <Tabs.Container
           HeaderComponent={Header}
           TabBarComponent={_renderTabBar}
-          lazy
+          //lazy
           ref={pageRef}>
           <Tabs.Tab name="A">
             <Albums />
