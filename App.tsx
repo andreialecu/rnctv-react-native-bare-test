@@ -54,11 +54,27 @@ const TabScreen = () => {
         <Tabs.Container
           HeaderComponent={Header}
           TabBarComponent={_renderTabBar}
+          lazy
           ref={pageRef}>
           <Tabs.Tab name="A">
             <Albums />
           </Tabs.Tab>
           <Tabs.Tab name="B">
+            <Albums />
+          </Tabs.Tab>
+          <Tabs.Tab name="C">
+            <Albums />
+          </Tabs.Tab>
+          <Tabs.Tab name="D">
+            <Albums />
+          </Tabs.Tab>
+          <Tabs.Tab name="E">
+            <Albums />
+          </Tabs.Tab>
+          <Tabs.Tab name="F">
+            <Albums />
+          </Tabs.Tab>
+          <Tabs.Tab name="G">
             <Albums />
           </Tabs.Tab>
         </Tabs.Container>
@@ -68,9 +84,10 @@ const TabScreen = () => {
 };
 
 const HomeScreen = ({navigation}) => {
+  console.log('test');
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Pressable onPress={() => navigation.navigate('TabScreen')}>
+      <Pressable style={{backgroundColor: 'blue', color: 'white', padding: 20}} onPress={() => navigation.navigate('TabScreen')}>
         <Text>Home Screen</Text>
       </Pressable>
     </View>
@@ -79,22 +96,24 @@ const HomeScreen = ({navigation}) => {
 
 const Stack = createStackNavigator();
 
-const App = () => (
-  <NavigationContainer>
-    <Stack.Navigator initialRouteName="Home">
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{title: 'Home'}}
-      />
-      <Stack.Screen
-        name="TabScreen"
-        component={TabScreen}
-        options={{title: 'Tabs'}}
-      />
-    </Stack.Navigator>
-  </NavigationContainer>
-);
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{title: 'Home'}}
+        />
+        <Stack.Screen
+          name="TabScreen"
+          component={TabScreen}
+          options={{title: 'Tabs'}}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
