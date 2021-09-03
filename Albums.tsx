@@ -16,6 +16,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {TouchableOpacity as TouchableOpacityRNGH} from 'react-native-gesture-handler';
 import {TabScreenContext} from './context';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const width = Dimensions.get('window').width;
 
@@ -85,6 +86,7 @@ export const Albums: React.FC = () => {
           <PressableComponent
             onPress={() => Alert.alert(PressableComponentString)}>
             <Image source={{uri: item}} style={styles.cover} />
+            <ScrollView />
           </PressableComponent>
         );
       }}
