@@ -17,6 +17,7 @@ import {enableScreens} from 'react-native-screens';
 
 import Albums from './Albums';
 import {TabScreenContext} from './context';
+import {Crash} from './Crash';
 
 declare const global: {HermesInternal: null | {}};
 
@@ -84,13 +85,17 @@ const TabScreen = () => {
 };
 
 const HomeScreen = ({navigation}) => {
-  console.log('test');
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Pressable style={{backgroundColor: 'blue', color: 'white', padding: 20}} onPress={() => navigation.navigate('TabScreen')}>
-        <Text>Home Screen</Text>
-      </Pressable>
-    </View>
+    <>
+      <Crash headerMeasurements={{height: 100, top: {value: 50}}} />
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <Pressable
+          style={{backgroundColor: 'blue', color: 'white', padding: 20}}
+          onPress={() => navigation.navigate('TabScreen')}>
+          <Text>Home Screen</Text>
+        </Pressable>
+      </View>
+    </>
   );
 };
 
